@@ -1,0 +1,20 @@
+#!/bin/sh
+
+for f in "$XDG_CONFIG_DIRS/autostart/"*; do
+ echo "$f"
+ SHOWIN=$(grep "OnlyShowIn" "$f")
+ NOTSHOWIN=$(grep "NotShowIn" "$f")
+
+ if [ "${NOTSHOWIN#*$XDG_CURRENT_DESKTOP}" = "$NOTSHOWIN" ]; then
+  echo "not in the not show list"
+  EXEC=$(grep "^Exec" "$f" | cut -d'=' -f 2-)
+  if [ "${SHOWIN#*$XDG_CURRENT_DESKTOP}" != "$SHOWIN" ]; then
+   echo "but it's in the show list"
+   sh -c "${EXEC}" &
+  elif [ "${SHOWIN}" = "" ]; then
+   echo "but the showin list is empty"
+   sh -c "${EXEC}" &
+  fi
+ fi
+
+done

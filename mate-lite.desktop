@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Name=MATE Lite Session
+Exec=/usr/bin/matelite-session
+Icon=
+Type=Application
+DesktopNames=MATE

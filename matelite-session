@@ -1,0 +1,59 @@
+PREFIX="/usr"
+SYSCONFDIR="/etc"
+
+if [ "x$XDG_DATA_HOME" = "x" ]; then
+	XDG_DATA_HOME="$HOME/.local/share"
+fi
+
+if [ "x$XDG_CONFIG_HOME" = "x" ]; then
+	XDG_CONFIG_HOME="$HOME/.config"
+fi
+
+if [ "x$XDG_CACHE_HOME" = "x" ]; then
+	XDG_CACHE_HOME="$HOME/.cache"
+fi
+
+if [ "x$XDG_DATA_DIRS" = "x" ]; then
+	XDG_DATA_DIRS="/usr/local/share:/usr/share:$PREFIX/share"
+fi
+
+if [ "x$XDG_CONFIG_DIRS" = "x" ]; then
+	XDG_CONFIG_DIRS="$SYSCONFDIR/xdg"
+fi
+
+# prefix for applications.menu
+if [ "x$XDG_MENU_PREFIX" = "x" ]; then
+	XDG_MENU_PREFIX="mate-"
+fi
+
+XDG_CURRENT_DESKTOP="MATE"
+
+[ -d $XDG_DATA_HOME ] || mkdir -p $XDG_DATA_HOME
+[ -d $XDG_CONFIG_HOME ] || mkdir -p $XDG_CONFIG_HOME
+[ -d $XDG_CACHE_HOME ] || mkdir -p $XDG_CACHE_HOME
+
+export XDG_DATA_HOME
+export XDG_CONFIG_HOME
+export XDG_CACHE_HOME
+export XDG_DATA_DIRS
+export XDG_CONFIG_DIRS
+export XDG_MENU_PREFIX
+export XDG_CURRENT_DESKTOP
+
+PATH=$PATH:$PREFIX:$PREFIX/bin
+export PATH
+
+# set the background color inside X
+if command -v xsetroot > /dev/null 2>&1; then
+	xsetroot -solid black
+fi
+
+/usr/bin/xdg-shell &
+
+/usr/lib/mate-notification-daemon/mate-notification-daemon &
+
+caja &
+
+marco &
+
+mate-panel
